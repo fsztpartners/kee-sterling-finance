@@ -1,0 +1,9 @@
+node_modules/
+.eve/
+.output/
+.workflow-data/
+.env
+*.tsbuildinfo
+
+# Build artifact produced by `npm run bundle` (regenerable; the marketplace stores it)
+sterling-finance.zip

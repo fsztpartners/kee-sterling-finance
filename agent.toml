@@ -1,0 +1,56 @@
+# Authoring source for sterling-finance. Run `npm run sync:entry` to regenerate entry.json. The platform also accepts this agent.toml directly in the upload zip.
+
+"$comment" = "keemakr Marketplace submission for the kee-sterling-finance agent. This is the EntrySubmission the platform's registerEntry() ingests (see keemakr-core src/lib/marketplace/types.ts). Installing it for a tenant creates the 'finance' department + its agents, gated on the one required connection (Stripe) below."
+
+slug = "sterling-finance"
+display_name = "Sterling Finance"
+description = "Monitors revenue and flags churn and failed-payment risk. Give it an account's billing snapshot — MRR, days overdue, failed charges, plan — and it returns a deterministic risk level, a recommended action, and a ready-to-send dunning draft."
+category = "finance"
+author = "keemakr"
+icon = "megaphone"
+visibility = "public"
+
+overview = """
+Sterling Finance watches your billing health and turns raw numbers into a clear next step. From an account's MRR, overdue days, and failed charges it scores churn and payment-failure risk on a deterministic low / watch / high / critical scale. For each at-risk account it recommends an action and drafts the dunning outreach for you. It is the smallest focused finance entry that still exercises the platform's full register, resolve-dependencies, and install round-trip."""
+
+operator = """
+Powered by the EVE Finance operator runtime — the keemakr operator hydrates each account's billing snapshot from your connected Stripe data and delegates the assessment to this remote eve agent over HTTP."""
+
+usage = """
+1. Connect your Stripe account so the operator can read charges, subscriptions, and payment failures. 2. Install the entry — the Finance department and its Revenue Monitor and Payment Recovery agents are seeded for your tenant. 3. The Revenue Monitor watches billing events and calls assess_account to flag at-risk accounts. 4. Review each flagged account's recommended action and edit-then-send the drafted dunning outreach."""
+
+changelog = "Initial release — revenue monitoring + churn / failed-payment risk assessment."
+
+[runtime]
+kind = "eve"
+ref = "https://github.com/keemakrpartners/kee-sterling-finance"
+status = "declared"
+
+[manifest.department]
+key = "finance"
+label = "Finance"
+description = "Revenue monitoring and recovery agents."
+
+[[manifest.agents]]
+key = "monitor"
+display_name = "Revenue Monitor"
+role = "monitor"
+description = "Watches billing events and flags risk via assess_account."
+config = { tool = "assess_account" }
+
+[[manifest.agents]]
+key = "recovery"
+display_name = "Payment Recovery"
+role = "recovery"
+description = "Drafts dunning outreach for failed payments."
+config = {}
+
+[manifest.meta]
+eve_root_agent = "agent/agent.ts"
+tools = ["assess_account"]
+
+[[dependencies]]
+kind = "connection"
+provider = "stripe"
+required = true
+reason = "Read charges, subscriptions, and payment failures."
