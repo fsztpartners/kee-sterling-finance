@@ -23,7 +23,7 @@ changelog = "Initial release — revenue monitoring + churn / failed-payment ris
 
 [runtime]
 kind = "eve"
-ref = "https://github.com/keemakrpartners/kee-sterling-finance"
+ref = "https://github.com/fsztpartners/kee-sterling-finance"
 status = "declared"
 
 [manifest.department]

@@ -9,6 +9,27 @@ It exists to be a small but real end-to-end example of a Marketplace entry — s
 enough to read in a minute, but complete enough to exercise the platform's full
 `register → resolve-dependencies → install` round-trip.
 
+## How to use
+
+This agent is a **keemakr Marketplace entry**. You don't run it directly — you **install it for your tenant** from the keemakr Marketplace, then talk to it through the keemakr operator chat.
+
+**1. Install it.** Find **Sterling Finance** in the Marketplace and install it. Installing **Sterling Finance** seeds the **Finance** department (disabled) and returns `pending_deps` until you connect its required dependency: `stripe`. Connect it in your tenant, then re-run install (idempotent) to flip to `installed` and enable the agents.
+
+**2. Route to it with `@finance`.** Once installed, the **Finance** department is available in the operator chat. Mention it by its handle — **`@finance`** — to route a request to its agents:
+
+| Agent key | Name | What it does |
+| --- | --- | --- |
+| `monitor` | Revenue Monitor | Watches billing events and flags risk via assess_account. |
+| `recovery` | Payment Recovery | Drafts dunning outreach for failed payments. |
+
+**3. Ask it.** For example:
+
+> @finance assess account acct_123 — it just had a failed payment
+
+You'll get back an at-risk assessment and a drafted dunning outreach, from your Stripe billing events.
+
+> Connecting external services or sending on your behalf always happens through the tenant connections you authorize at install — the agent reaches them via keemakr's capability proxy and never sees your raw credentials.
+
 ## What's here
 
 | Path | What it is |
